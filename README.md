@@ -2,14 +2,25 @@
 Is sa-mp dialog design-look-a-like for FiveM, the function and usage are same like the sa-mp docs, yet another utility if you do miss a masterpiece memories
 
 # Screenshot
-- [Screenshot 1](./images/1.png)
-- [Screenshot 2](./images/2.png)
-- [Screenshot 3](./images/3.png)
+<details>
+  <summary>Screenshot 1</summary>
+  <img src="./images/1.png" alt="Screenshot 1">
+</details>
+
+<details>
+  <summary>Screenshot 2</summary>
+  <img src="./images/2.png" alt="Screenshot 2">
+</details>
+
+<details>
+  <summary>Screenshot 3</summary>
+  <img src="./images/3.png" alt="Screenshot 3">
+</details>- [Screenshot 2](./images/2.png)
+
 
 # Usage
 The usage is pretty simple just put it on your `resources` files and `ensure SAM-dialog` in server.cfg, you can use both in server or client side.
 
-Example
 ```lua
 RegisterCommand("serverdialog", function(source, args, rawCommand)
     local dialogid = 5
@@ -22,7 +33,10 @@ RegisterCommand("serverdialog", function(source, args, rawCommand)
 end, false)```
 
 
+# Callback
+
 Every functions trigger  server event called 
+
 ```lua
 AddEventHandler("OnDialogResponse", function(dialogid, response, listitem, inputtext)end)
 ```
