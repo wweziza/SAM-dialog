@@ -15,7 +15,8 @@ server_scripts {
 
 files {
     'html/index.html',
-    'html/style.css'
+    'html/style.css',
+    'html/script.js'
 }
 
 ui_page 'html/index.html'
