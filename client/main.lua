@@ -1,6 +1,6 @@
 local currentDialog = nil
 
-function ShowPlayerDialog(playerid, dialogid, style, title, body, button1, button2)
+ 
     if currentDialog then
         SendNUIMessage({
             type = "hideDialog"
