@@ -53,33 +53,6 @@ Style 4: DIALOG_STYLE_TABLIST
 Style 5: DIALOG_STYLE_TABLIST_HEADERS
 ```
 
-## ShowPlayerDialog
-
-The `ShowPlayerDialog` function is used to show a dialog to a player.
-|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Name          | Description                                                                                                                                                        |
-|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| playerid      | The ID of the player to show the dialog to.                                                                                                                        |
-| dialogid      | An ID to assign this dialog to, so responses can be processed. Max dialogid is 32767. Using negative values will close any open dialog.                            |
-| style         | The style of the dialog.                                                                                                                                           |
-| title         | The title at the top of the dialog. The length of the caption cannot exceed more than 64 characters before it starts to cut off.                                   |
-| body          | The text to display in the main dialog. Use `\n` to start a new line and `\t` to tabulate.                                                                         |
-| button1       | The text on the left button.                                                                                                                                       |
-| button2       | The text on the right button. Leave it blank ( `""` ) to hide it.                                                                                                  |
-|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-
-## OnDialogResponse
-
-This event is called when a player responds to a dialog shown using `ShowPlayerDialog` by either clicking a button, pressing ENTER/ESC or double-clicking a list item (if using a list style dialog).
-|---------------|-----------------------------------------------------------------------------------------------------------|
-| Name       | Description                                                                                                  |
-|------------|--------------------------------------------------------------------------------------------------------------|
-| playerid   | The ID of the player that responded to the dialog.                                                           |
-| dialogid   | The ID of the dialog the player responded to, assigned in `ShowPlayerDialog`.                                |
-| response   | 1 for left button and 0 for right button (if only one button shown, always 1)                                |
-| listitem   | The ID of the list item selected by the player (starts at 0).                                                |
-| inputtext  | The text entered into the input box by the player or the selected list item text.                            |
-|------------|--------------------------------------------------------------------------------------------------------------|
 
 It's still work in progress so it only support style 0-2.
 
