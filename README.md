@@ -15,7 +15,7 @@ Is sa-mp dialog design-look-a-like for FiveM, the function and usage are same li
 <details>
   <summary>Screenshot 3</summary>
   <img src="./images/3.png" alt="Screenshot 3">
-</details>- 
+</details>
 
 
 # Usage
