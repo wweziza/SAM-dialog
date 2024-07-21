@@ -1,7 +1,7 @@
 # SAM Dialog
 Is sa-mp dialog design-look-a-like for FiveM, the function and usage are same like the sa-mp docs, yet another utility if you do miss a masterpiece memories
 
-# Screenshot
+### Screenshot
 <details>
   <summary>Screenshot 1</summary>
   <img src="./images/1.png" alt="Screenshot 1">
@@ -15,7 +15,7 @@ Is sa-mp dialog design-look-a-like for FiveM, the function and usage are same li
 <details>
   <summary>Screenshot 3</summary>
   <img src="./images/3.png" alt="Screenshot 3">
-</details>- [Screenshot 2](./images/2.png)
+</details>- 
 
 
 # Usage
@@ -30,10 +30,11 @@ RegisterCommand("serverdialog", function(source, args, rawCommand)
     local button1 = "Submit"
     local button2 = "Close"
     ShowPlayerDialog(source, dialogid, style, title, body, button1, button2)
-end, false)```
+end, false)
+```
 
 
-# Callback
+## Callback
 
 Every functions trigger  server event called 
 
