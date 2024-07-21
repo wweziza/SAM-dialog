@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAM Dialog (For LSW)</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div id="dialog" class="dialog-container">
+        <div id="dialogTitle" class="dialog-title"></div>
+        <div id="dialogContent" class="dialog-content"></div>
+        <input type="text" id="dialogInput" class="dialog-input" placeholder="Enter text...">
+        <div class="dialog-buttons">
+            <button class="dialog-button" onclick="closeDialog('OK')">OK</button>
+            <button class="dialog-button" onclick="closeDialog('Cancel')">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('message', function(event) {
+            var item = event.data;
+            if (item.type === "showDialog") {
+                document.getElementById('dialogTitle').textContent = item.title;
+                document.getElementById('dialogContent').textContent = item.content;
+                document.getElementById('dialog').style.display = 'block';
+            }
+        });
+
+        function closeDialog(response) {
+            var inputText = document.getElementById('dialogInput').value;
+            fetch(`https://${GetParentResourceName()}/dialogClosed`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify({
+                    response: response,
+                    inputText: inputText
+                })
+            }).then(resp => resp.json()).then(resp => {
+                document.getElementById('dialog').style.display = 'none';
+                document.getElementById('dialogInput').value = '';
+            });
+        }
+    </script>
+</body>
+</html>
