@@ -1,33 +1,83 @@
-local isDialogOpen = false
+local currentDialog = nil
 
--- Function to show dialog
-function ShowDialog(title, content, callback)
-    if not isDialogOpen then
-        isDialogOpen = true
-        SetNuiFocus(true, true)
+function ShowPlayerDialog(playerid, dialogid, style, title, body, button1, button2)
+    if currentDialog then
         SendNUIMessage({
-            type = "showDialog",
-            title = title,
-            content = content
+            type = "hideDialog"
         })
     end
+
+    currentDialog = {
+        dialogid = dialogid,
+        style = style
+    }
+    
+    SetNuiFocus(true, true)
+    SendNUIMessage({
+        type = "showDialog",
+        dialogid = dialogid,
+        style = style,
+        title = title,
+        body = body,
+        button1 = button1,
+        button2 = button2
+    })
 end
 
--- NUI Callback for when dialog is closed
-RegisterNUICallback("dialogClosed", function(data, cb)
-    isDialogOpen = false
+RegisterNUICallback("dialogResponse", function(data, cb)
     SetNuiFocus(false, false)
-    TriggerServerEvent("dialogResponse", data.response, data.inputText)
+    
+    if currentDialog then
+        TriggerServerEvent("OnDialogResponse", currentDialog.dialogid, data.response, data.listitem, data.inputtext)
+        currentDialog = nil
+    end
+    
+    SendNUIMessage({
+        type = "hideDialog"
+    })
+    
     cb('ok')
 end)
 
--- Command to test dialog
-RegisterCommand("testdialog", function(source, args, rawCommand)
-    ShowDialog("Test Dialog", "This is a test dialog. Enter some text:")
+
+function AddMessage(message)
+    TriggerEvent('chat:addMessage', {
+        color = {255, 255, 255},
+        multiline = true,
+        args = {"System", message}
+    })
+end
+
+
+RegisterNetEvent("addClientMessage")
+AddEventHandler("addClientMessage", function(message)
+    AddMessage(message)
+end)
+
+
+RegisterCommand("testlistdialog", function(source, args, rawCommand)
+    local dialogid = 1
+    local style = 2  -- DIALOG_STYLE_LIST
+    local title = "Fruit Selection"
+    local body = "Apple\n{FFFF00}Mango\nMelon"
+    local button1 = "Select"
+    local button2 = "Cancel"
+    ShowPlayerDialog(GetPlayerServerId(PlayerId()), dialogid, style, title, body, button1, button2)
 end, false)
 
--- Event handler for server-triggered dialogs
+
+RegisterCommand("testdialog", function(source, args, rawCommand)
+    local dialogid = 1
+    local style = 0  -- DIALOG_STYLE_MSGBOX
+    local title = "Test Dialog"
+    local body = "This is a test dialog."
+    local button1 = "OK"
+    local button2 = "Cancel"
+    ShowPlayerDialog(GetPlayerServerId(PlayerId()), dialogid, style, title, body, button1, button2)
+end, false)
+
+
 RegisterNetEvent("showClientDialog")
-AddEventHandler("showClientDialog", function(title, content)
-    ShowDialog(title, content)
+AddEventHandler("showClientDialog", function(dialogid, style, title, body, button1, button2)
+    ShowPlayerDialog(GetPlayerServerId(PlayerId()), dialogid, style, title, body, button1, button2)
 end)

@@ -3,46 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAM Dialog (For LSW)</title>
-    <link rel="stylesheet" href="index.css">
+    <title>SA-MP Style Dialog</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="dialog" class="dialog-container">
         <div id="dialogTitle" class="dialog-title"></div>
         <div id="dialogContent" class="dialog-content"></div>
-        <input type="text" id="dialogInput" class="dialog-input" placeholder="Enter text...">
+        <input type="text" id="dialogInput" class="dialog-input" style="display: none;">
+        <select id="dialogList" class="dialog-list" style="display: none;" size="10"></select>
         <div class="dialog-buttons">
-            <button class="dialog-button" onclick="closeDialog('OK')">OK</button>
-            <button class="dialog-button" onclick="closeDialog('Cancel')">Cancel</button>
+            <button id="button1" class="dialog-button"></button>
+            <button id="button2" class="dialog-button"></button>
         </div>
     </div>
 
     <script>
+        const dialog = document.getElementById('dialog');
+        const dialogTitle = document.getElementById('dialogTitle');
+        const dialogContent = document.getElementById('dialogContent');
+        const dialogInput = document.getElementById('dialogInput');
+        const dialogList = document.getElementById('dialogList');
+        const button1 = document.getElementById('button1');
+        const button2 = document.getElementById('button2');
+
+        let currentDialogId = null;
+
         window.addEventListener('message', function(event) {
-            var item = event.data;
+            const item = event.data;
             if (item.type === "showDialog") {
-                document.getElementById('dialogTitle').textContent = item.title;
-                document.getElementById('dialogContent').textContent = item.content;
-                document.getElementById('dialog').style.display = 'block';
+                currentDialogId = item.dialogid;
+                dialogTitle.textContent = item.title;
+                button1.textContent = item.button1;
+                button2.textContent = item.button2;
+
+                dialogInput.style.display = 'none';
+                dialogList.style.display = 'none';
+                dialogContent.style.display = 'none';
+
+                switch(item.style) {
+                    case 0: // DIALOG_STYLE_MSGBOX
+                        dialogContent.style.display = 'block';
+                        dialogContent.textContent = item.body;
+                        break;
+                    case 1: // DIALOG_STYLE_INPUT
+                        dialogContent.style.display = 'block';
+                        dialogContent.textContent = item.body;
+                        dialogInput.style.display = 'block';
+                        break;
+                    case 2: // DIALOG_STYLE_LIST
+                        dialogList.style.display = 'block';
+                        dialogList.innerHTML = '';
+                        const items = item.body.split('\n');
+                        items.forEach((item, index) => {
+                            const option = document.createElement('option');
+                            option.value = index;
+                            option.textContent = item.replace(/\{[A-Fa-f0-9]{6}\}/g, ''); // Remove color codes
+                            if (item.includes('{FFFF00}')) {
+                                option.style.color = '#FFFF00';
+                            }
+                            dialogList.appendChild(option);
+                        });
+                        break;
+                }
+
+                dialog.style.display = 'block';
+            } else if (item.type === "hideDialog") {
+                dialog.style.display = 'none';
+                currentDialogId = null;
             }
         });
 
         function closeDialog(response) {
-            var inputText = document.getElementById('dialogInput').value;
-            fetch(`https://${GetParentResourceName()}/dialogClosed`, {
+            const inputText = dialogInput.value;
+            const listItem = dialogList.selectedIndex;
+
+            fetch(`https://${GetParentResourceName()}/dialogResponse`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({
+                    dialogid: currentDialogId,
                     response: response,
-                    inputText: inputText
+                    listitem: listItem,
+                    inputtext: inputText
                 })
-            }).then(resp => resp.json()).then(resp => {
-                document.getElementById('dialog').style.display = 'none';
-                document.getElementById('dialogInput').value = '';
             });
+
+            dialog.style.display = 'none';
+            dialogInput.value = '';
+            dialogList.innerHTML = '';
         }
+
+        button1.addEventListener('click', () => closeDialog(true));
+        button2.addEventListener('click', () => closeDialog(false));
     </script>
 </body>
 </html>
