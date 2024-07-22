@@ -1,6 +1,7 @@
+-- client/main.lua
 local currentDialog = nil
 
- 
+function ShowPlayerDialog(playerid, dialogid, style, title, body, button1, button2)
     if currentDialog then
         SendNUIMessage({
             type = "hideDialog"
@@ -23,6 +24,13 @@ local currentDialog = nil
         button2 = button2
     })
 end
+
+RegisterNetEvent("SAM-dialog:Client:ShowPlayerDialog") -- for calling
+AddEventHandler("SAM-dialog:Client:ShowPlayerDialog", function(playerid, dialogid, style, title, body, button1, button2)
+    if playerid == GetPlayerServerId(PlayerId()) then
+        ShowPlayerDialog(playerid, dialogid, style, title, body, button1, button2)
+    end
+end)
 
 RegisterNUICallback("SAM-dialog:Client:dialogResponse", function(data, cb)
     SetNuiFocus(false, false)
@@ -55,6 +63,12 @@ AddEventHandler("addClientMessage", function(message)
 end)
 
 
+RegisterNetEvent("SAM-dialog:Client:showClientDialog")
+AddEventHandler("SAM-dialog:Client:showClientDialog", function(dialogid, style, title, body, button1, button2)
+    ShowPlayerDialog(GetPlayerServerId(PlayerId()), dialogid, style, title, body, button1, button2)
+end)
+
+-- TESTING
 RegisterCommand("testlistdialog", function(source, args, rawCommand)
     local dialogid = 1
     local style = 2  -- DIALOG_STYLE_LIST
@@ -76,8 +90,3 @@ RegisterCommand("testdialog", function(source, args, rawCommand)
     ShowPlayerDialog(GetPlayerServerId(PlayerId()), dialogid, style, title, body, button1, button2)
 end, false)
 
-
-RegisterNetEvent("SAM-dialog:Client:showClientDialog")
-AddEventHandler("SAM-dialog:Client:showClientDialog", function(dialogid, style, title, body, button1, button2)
-    ShowPlayerDialog(GetPlayerServerId(PlayerId()), dialogid, style, title, body, button1, button2)
-end)

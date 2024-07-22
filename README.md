@@ -19,28 +19,37 @@ Is sa-mp dialog design-look-a-like for FiveM, the function and usage are same li
 
 
 # Usage
-The usage is pretty simple just put it on your `resources` files and `ensure SAM-dialog` in server.cfg, you can use both in server or client side.
+The usage is pretty simple just put it on your `resources` files and `ensure SAM-dialog` in server.cfg, you can use both in server or client side OR you can use it on your own resource.
+
+Example
 
 ```lua
+-- yourResource/client/main.lua
+
 RegisterCommand("serverdialog", function(source, args, rawCommand)
+    local playerId = GetPlayerServerId(PlayerId())
     local dialogid = 5
     local style = 1  -- DIALOG_STYLE_INPUT
     local title = "Server Dialog"
     local body = "This dialog was triggered from the server. Enter some text:"
     local button1 = "Submit"
     local button2 = "Close"
-    ShowPlayerDialog(source, dialogid, style, title, body, button1, button2)
-end, false)
+    TriggerEvent("SAM-dialog:Client:ShowPlayerDialog", playerId, dialogid, style, title, body, button1, button2)false)
 ```
 
 
 ## Callback
 
-Every functions trigger  server event called 
-
+Every functions trigger server event called and you also can listen it to another resources (just make sure it ensured first before your resources)
+Just add this to your resources
 ```lua
-AddEventHandler("OnDialogResponse", function(dialogid, response, listitem, inputtext)end)
+RegisterNetEvent('SAM-scoreboard:Server:Custom:OnDialogResponse')
+AddEventHandler('SAM-scoreboard:Server:Custom:OnDialogResponse', function(dialogid, response, listitem, inputtext)
+    -- Handle the event here
+    print("Received player click event in Example resource. Dialog ID: " .. dialogid .. ", Response: " .. response .. ", Listitem: " .. listitem ... ", Inputtext: " ... inputtext)
+end)
 ```
+
 
 ## DIALOG_STYLE:style
 
@@ -57,3 +66,6 @@ Style 5: DIALOG_STYLE_TABLIST_HEADERS
 It's still work in progress so it only support style 0-2.
 
 Feel free to open an issue, and contribute are welcomed.
+
+### Note
+The original event will be called first than the custom event.

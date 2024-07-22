@@ -1,6 +1,6 @@
-
+-- server/main.lua
 function ShowPlayerDialog(playerid, dialogid, style, title, body, button1, button2)
-    TriggerClientEvent("showClientDialog", playerid, dialogid, style, title, body, button1, button2)
+    TriggerClientEvent("SAM-dialog:Client:showClientDialog", playerid, dialogid, style, title, body, button1, button2)
 end
 
 function SendClientMessage(playerid, message)
@@ -8,10 +8,10 @@ function SendClientMessage(playerid, message)
 end
 
 
-RegisterServerEvent("SAM-dialog:Server:OnDialogRepsonse")
-AddEventHandler("SAM-dialog:Server:OnDialogRepsonse", function(dialogid, response, listitem, inputtext)
+RegisterServerEvent("SAM-dialog:Server:OnDialogResponse")
+AddEventHandler("SAM-dialog:Server:OnDialogResponse", function(dialogid, response, listitem, inputtext)
     local source = source
-    print(string.format("SAM-dialog:Server:OnDialogRepsonse: playerid = %d, dialogid = %d, response = %s, listitem = %d, inputtext = %s",
+    print(string.format("SAM-dialog:Server:OnDialogResponse: playerid = %d, dialogid = %d, response = %s, listitem = %d, inputtext = %s",
         source, dialogid, response and "true" or "false", listitem, inputtext))
     
     
@@ -31,9 +31,12 @@ AddEventHandler("SAM-dialog:Server:OnDialogRepsonse", function(dialogid, respons
         SendClientMessage(source, "You selected: " .. inputtext)
     
     end
-    TriggerEvent('SAM-dialog:Server:Custom:OnDialogRepsonse',dialogid, response, listitem, inputtext)
+    TriggerEvent('SAM-dialog:Server:Custom:OnDialogResponse',dialogid, response, listitem, inputtext)
 end)
 
+
+
+--- TESTING
 
 RegisterCommand("serverlistdialog", function(source, args, rawCommand)
     local dialogid = 1

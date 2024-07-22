@@ -1,3 +1,4 @@
+// script.js
 const dialog = document.getElementById('dialog');
 const dialogTitle = document.getElementById('dialogTitle');
 const dialogContent = document.getElementById('dialogContent');
