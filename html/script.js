@@ -57,7 +57,7 @@ function closeDialog(response) {
     const inputText = dialogInput.value;
     const listItem = dialogList.selectedIndex;
 
-    fetch(`https://${GetParentResourceName()}/dialogResponse`, {
+    fetch(`https://${GetParentResourceName()}/SAM-dialog:Client:dialogResponse`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8',

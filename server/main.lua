@@ -8,10 +8,10 @@ function SendClientMessage(playerid, message)
 end
 
 
-RegisterServerEvent("OnDialogResponse")
-AddEventHandler("OnDialogResponse", function(dialogid, response, listitem, inputtext)
+RegisterServerEvent("SAM-dialog:Server:OnDialogRepsonse")
+AddEventHandler("SAM-dialog:Server:OnDialogRepsonse", function(dialogid, response, listitem, inputtext)
     local source = source
-    print(string.format("OnDialogResponse: playerid = %d, dialogid = %d, response = %s, listitem = %d, inputtext = %s",
+    print(string.format("SAM-dialog:Server:OnDialogRepsonse: playerid = %d, dialogid = %d, response = %s, listitem = %d, inputtext = %s",
         source, dialogid, response and "true" or "false", listitem, inputtext))
     
     
@@ -31,6 +31,7 @@ AddEventHandler("OnDialogResponse", function(dialogid, response, listitem, input
         SendClientMessage(source, "You selected: " .. inputtext)
     
     end
+    TriggerEvent('SAM-dialog:Server:Custom:OnDialogRepsonse',dialogid, response, listitem, inputtext)
 end)
 
 

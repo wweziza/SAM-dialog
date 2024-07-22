@@ -24,11 +24,11 @@ local currentDialog = nil
     })
 end
 
-RegisterNUICallback("dialogResponse", function(data, cb)
+RegisterNUICallback("SAM-dialog:Client:dialogResponse", function(data, cb)
     SetNuiFocus(false, false)
     
     if currentDialog then
-        TriggerServerEvent("OnDialogResponse", currentDialog.dialogid, data.response, data.listitem, data.inputtext)
+        TriggerServerEvent("SAM-dialog:Server:OnDialogResponse", currentDialog.dialogid, data.response, data.listitem, data.inputtext)
         currentDialog = nil
     end
     
@@ -77,7 +77,7 @@ RegisterCommand("testdialog", function(source, args, rawCommand)
 end, false)
 
 
-RegisterNetEvent("showClientDialog")
-AddEventHandler("showClientDialog", function(dialogid, style, title, body, button1, button2)
+RegisterNetEvent("SAM-dialog:Client:showClientDialog")
+AddEventHandler("SAM-dialog:Client:showClientDialog", function(dialogid, style, title, body, button1, button2)
     ShowPlayerDialog(GetPlayerServerId(PlayerId()), dialogid, style, title, body, button1, button2)
 end)
